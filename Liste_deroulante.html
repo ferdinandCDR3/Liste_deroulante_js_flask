@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste déroulante</title>
+  <script>
+    function deroulante() {
+      var info = document.getElementById("info");
+      var liste = document.getElementById("maListe");
+      var valeurSelectionnee = liste.options[liste.selectedIndex].value;
+      const valeur = { select: valeurSelectionnee };
+      fetch('http://127.0.0.1:5000', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ estCochee: valeur })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Réponse reçue :', data);
+        info.style.display = "block";
+        document.getElementById("selected").innerText = valeurSelectionnee;
+      })
+      .catch((error) => {
+        console.error('Erreur :', error);
+      });
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="affichage">
+    <h2>Liste déroulante</h2>
+    <form id="formulaire">
+      <select id="maListe">
+        <option value="Valeur 1">Valeur 1</option>
+        <option value="Valeur 2">Valeur 2</option>
+        <option value="Valeur 3">Valeur 3</option>
+      </select>
+      <br>
+      <div id="info" class="hide">
+        <p id="result">La valeur sélectionée dans la liste déroulante est :<span id="selected">0</span></p>
+    </div>
+    <br>
+    <br>
+    <br>
+    <button type="button" onclick="deroulante()">Valider</button>
+    </form>
+  </div>
+</body>
+</html>
